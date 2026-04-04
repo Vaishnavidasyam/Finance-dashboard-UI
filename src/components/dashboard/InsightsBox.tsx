@@ -1,7 +1,12 @@
-import { motion } from 'framer-motion';
-import { Lightbulb, AlertTriangle, CheckCircle2, Flame } from 'lucide-react';
-import { formatCurrency, getHighestCategory, calculateTotals, getCategoryTotals } from '@/utils/calculations';
-import { Transaction } from '@/data/mockData';
+import { motion } from "framer-motion";
+import { Lightbulb, AlertTriangle, CheckCircle2, Flame } from "lucide-react";
+import {
+  formatCurrency,
+  getHighestCategory,
+  calculateTotals,
+  getCategoryTotals,
+} from "@/utils/calculations";
+import { Transaction } from "@/data/mockData";
 
 interface InsightItem {
   icon: React.ElementType;
@@ -11,10 +16,17 @@ interface InsightItem {
   body: React.ReactNode;
 }
 
-export default function InsightsBox({ transactions }: { transactions: Transaction[] }) {
+export default function InsightsBox({
+  transactions,
+}: {
+  transactions: Transaction[];
+}) {
   const highest = getHighestCategory(transactions);
   const { totalIncome, totalExpense, balance } = calculateTotals(transactions);
-  const savingsRate = totalIncome > 0 ? ((balance / totalIncome) * 100).toFixed(0) : '0';
+
+  const savingsRate =
+    totalIncome > 0 ? ((balance / totalIncome) * 100).toFixed(0) : "0";
+
   const catTotals = getCategoryTotals(transactions);
   const topTwo = catTotals.slice(0, 2);
 
@@ -26,84 +38,103 @@ export default function InsightsBox({ transactions }: { transactions: Transactio
   const insights: InsightItem[] = [
     {
       icon: Flame,
-      color: 'text-orange-500',
-      bg: 'bg-orange-50 dark:bg-orange-950/30',
-      title: 'Top Spending Category',
+      color: "text-orange-500",
+      bg: "bg-orange-100 dark:bg-orange-900/30",
+      title: "Top Spending",
       body: (
         <>
-          <span className="font-semibold text-foreground">{highest.name}</span> accounts for{' '}
-          <span className="font-semibold text-danger">{highest.percentage}%</span> of your expenses (
-          {formatCurrency(highest.amount)}).
+          <span className="font-semibold text-foreground">{highest.name}</span>{" "}
+          takes{" "}
+          <span className="font-semibold text-red-500">
+            {highest.percentage}%
+          </span>{" "}
+          ({formatCurrency(highest.amount)})
         </>
       ),
     },
     {
       icon: isHealthy ? CheckCircle2 : AlertTriangle,
-      color: isHealthy ? 'text-emerald-500' : 'text-amber-500',
-      bg: isHealthy ? 'bg-emerald-50 dark:bg-emerald-950/30' : 'bg-amber-50 dark:bg-amber-950/30',
-      title: 'Savings Rate',
+      color: isHealthy ? "text-emerald-500" : "text-amber-500",
+      bg: isHealthy
+        ? "bg-emerald-100 dark:bg-emerald-900/30"
+        : "bg-amber-100 dark:bg-amber-900/30",
+      title: "Savings",
       body: (
         <>
-          You saved{' '}
-          <span className={`font-semibold ${isHealthy ? 'text-success' : 'text-amber-600'}`}>
+          Saved{" "}
+          <span
+            className={`font-semibold ${
+              isHealthy ? "text-emerald-500" : "text-amber-500"
+            }`}
+          >
             {savingsRate}%
-          </span>{' '}
-          of your income.{' '}
-          {isHealthy ? '🎉 Great job! Keep it up.' : 'Aim for 20%+ for financial health.'}
+          </span>{" "}
+          {isHealthy ? "✓ Good" : "⚠ Improve"}
         </>
       ),
     },
     {
       icon: Lightbulb,
-      color: 'text-blue-500',
-      bg: 'bg-blue-50 dark:bg-blue-950/30',
-      title: 'Spending Tip',
-      body: topTwo.length >= 2 ? (
-        <>
-          Your top 2 categories —{' '}
-          <span className="font-semibold text-foreground">{topTwo[0].name}</span> &{' '}
-          <span className="font-semibold text-foreground">{topTwo[1].name}</span> — make up{' '}
-          <span className="font-semibold text-primary">
-            {((( topTwo[0].value + topTwo[1].value) / totalExpense) * 100).toFixed(0)}%
-          </span>{' '}
-          of total expenses. Reducing these would have the highest impact.
-        </>
-      ) : (
-        'Add more transactions to get personalized tips!'
-      ),
+      color: "text-blue-500",
+      bg: "bg-blue-100 dark:bg-blue-900/30",
+      title: "Tip",
+      body:
+        topTwo.length >= 2 ? (
+          <>
+            Focus on <span className="font-semibold">{topTwo[0].name}</span> &{" "}
+            <span className="font-semibold">{topTwo[1].name}</span> (
+            {(
+              ((topTwo[0].value + topTwo[1].value) / totalExpense) *
+              100
+            ).toFixed(0)}
+            %)
+          </>
+        ) : (
+          "Add more data"
+        ),
     },
   ];
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.55 }}
-      className="rounded-2xl border border-border bg-card p-6 shadow-lg"
+      transition={{ delay: 0.5 }}
+      className="rounded-2xl bg-white dark:bg-zinc-900 shadow-md border p-6"
     >
+      {/* HEADER */}
       <div className="mb-5 flex items-center gap-2">
-        <Lightbulb className="h-5 w-5 text-primary" />
-        <h3 className="text-lg font-bold text-foreground">Smart Insights</h3>
+        <Lightbulb className="h-5 w-5 text-blue-500" />
+        <h3 className="text-lg font-semibold text-foreground">Insights</h3>
       </div>
 
+      {/* CARDS */}
       <div className="grid gap-4 sm:grid-cols-3">
         {insights.map((ins, i) => {
           const Icon = ins.icon;
+
           return (
             <motion.div
               key={i}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 + i * 0.1 }}
-              className="rounded-xl border border-border/60 bg-background/50 p-4"
+              className="rounded-xl border p-4 bg-gray-50 dark:bg-zinc-800/60 hover:shadow-md transition"
             >
+              {/* ICON */}
               <div className={`mb-3 inline-flex rounded-lg p-2 ${ins.bg}`}>
                 <Icon className={`h-4 w-4 ${ins.color}`} />
               </div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+
+              {/* TITLE */}
+              <p className="text-xs font-medium text-muted-foreground mb-1">
                 {ins.title}
               </p>
-              <p className="text-sm leading-relaxed text-muted-foreground">{ins.body}</p>
+
+              {/* BODY */}
+              <p className="text-sm font-medium text-foreground leading-snug">
+                {ins.body}
+              </p>
             </motion.div>
           );
         })}

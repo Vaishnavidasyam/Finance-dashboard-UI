@@ -1,154 +1,168 @@
-import { motion } from "framer-motion";
-import { DollarSign, Moon, Sun, ShieldCheck, Eye, Menu, X } from "lucide-react";
+import {
+  DollarSign,
+  Moon,
+  Sun,
+  User,
+  ShieldCheck,
+  Menu,
+  X,
+  RefreshCw,
+  Sparkles,
+} from "lucide-react";
 import { useState } from "react";
-import { AnimatePresence } from "framer-motion";
 
 interface NavbarProps {
   role: "admin" | "viewer";
-  setRole: (role: "admin" | "viewer") => void;
-  darkMode: boolean;
-  setDarkMode: (v: boolean) => void;
+  onRoleChange: (role: "admin" | "viewer") => void;
+  isDark: boolean;
+  onToggleDark: () => void;
+  onResetData?: () => void;
+  isResetting?: boolean;
 }
 
 export default function Navbar({
   role,
-  setRole,
-  darkMode,
-  setDarkMode,
+  onRoleChange,
+  isDark,
+  onToggleDark,
+  onResetData,
+  isResetting,
 }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-30 border-b border-border/60 bg-card/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-        {/* Logo */}
-        <motion.div
-          className="flex items-center gap-2"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-md shadow-blue-500/30">
-            <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-          </div>
-          <div>
-            <span className="text-base sm:text-lg font-black tracking-tight text-foreground">
-              Finance
-            </span>
-            <span className="text-base sm:text-lg font-black tracking-tight text-primary">
-              Hub
-            </span>
-          </div>
-        </motion.div>
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/60 dark:bg-zinc-900/60 border-b border-white/10 shadow-lg">
+      <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-3">
+        {/* 🔥 LOGO */}
+        <div className="relative flex items-center gap-3 group">
+          {/* Glow */}
+          <div className="absolute -inset-3 opacity-0 group-hover:opacity-100 blur-2xl transition duration-700 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500" />
 
-        {/* Desktop controls */}
-        <motion.div
-          className="hidden sm:flex items-center gap-2"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-all hover:bg-accent hover:text-foreground"
-          >
-            <motion.div
-              key={darkMode ? "sun" : "moon"}
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              transition={{ duration: 0.2 }}
-            >
-              {darkMode ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-            </motion.div>
-          </button>
+          <div className="relative flex items-center gap-2">
+            {/* Icon */}
+            <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 text-white shadow-xl group-hover:scale-110 transition">
+              <DollarSign className="h-5 w-5 group-hover:rotate-12 transition duration-300" />
+            </div>
 
-          <div className="flex items-center overflow-hidden rounded-xl border border-border bg-background p-1">
-            {(["admin", "viewer"] as const).map((r) => (
+            {/* Text */}
+            <h1 className="text-xl font-black tracking-tight bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">
+              FinanceHub
+            </h1>
+          </div>
+        </div>
+
+        {/* DESKTOP */}
+        <div className="hidden sm:flex items-center gap-3">
+          {/* 🔄 RESET BUTTON */}
+
+          {/* 🔥 ROLE SWITCH */}
+          <div className="flex rounded-xl border border-white/10 bg-white/50 dark:bg-zinc-800/50 backdrop-blur overflow-hidden">
+            {(["viewer", "admin"] as const).map((r) => (
               <button
                 key={r}
-                onClick={() => setRole(r)}
-                className={`relative flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${role === r ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                onClick={() => onRoleChange(r)}
+                className="relative px-4 py-1.5 text-xs font-semibold flex items-center gap-1 transition-all"
               >
+                {/* Active Background */}
                 {role === r && (
-                  <motion.div
-                    layoutId="roleActive"
-                    className="absolute inset-0 rounded-lg bg-primary"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
+                  <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 shadow-md" />
                 )}
-                <span className="relative flex items-center gap-1.5">
+
+                <span
+                  className={`relative flex items-center gap-1 ${
+                    role === r
+                      ? "text-white"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
                   {r === "admin" ? (
-                    <ShieldCheck className="h-3 w-3" />
+                    <>
+                      <ShieldCheck className="h-3 w-3" />
+                      <Sparkles className="h-3 w-3 animate-pulse" />
+                    </>
                   ) : (
-                    <Eye className="h-3 w-3" />
+                    <User className="h-3 w-3" />
                   )}
-                  {r.charAt(0).toUpperCase() + r.slice(1)}
+                  {r}
                 </span>
               </button>
             ))}
           </div>
-        </motion.div>
 
-        {/* Mobile hamburger */}
+          {/* 🌙 DARK MODE */}
+          <button
+            onClick={onToggleDark}
+            className="relative h-10 w-10 flex items-center justify-center rounded-xl border border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur transition-all hover:scale-110 group"
+          >
+            {isDark ? (
+              <Sun className="h-5 w-5 text-yellow-400" />
+            ) : (
+              <Moon className="h-5 w-5 text-blue-500" />
+            )}
+
+            {/* Glow */}
+            <div className="absolute inset-0 rounded-xl blur-md opacity-0 group-hover:opacity-40 bg-gradient-to-r from-blue-500 to-purple-500 transition" />
+          </button>
+        </div>
+
+        {/* MOBILE BUTTON */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="flex sm:hidden h-9 w-9 items-center justify-center rounded-xl text-muted-foreground hover:bg-accent"
+          className="sm:hidden h-10 w-10 flex items-center justify-center rounded-xl border border-white/10 bg-white/70 dark:bg-zinc-900/70 backdrop-blur"
         >
-          {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          {menuOpen ? <X /> : <Menu />}
         </button>
       </div>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-t border-border sm:hidden"
-          >
-            <div className="flex flex-col gap-3 px-4 py-4">
+      {/* 📱 MOBILE MENU */}
+      <div
+        className={`sm:hidden transition-all duration-500 overflow-hidden ${
+          menuOpen ? "max-h-72 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="p-4 space-y-3 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border-t">
+          {/* ROLE */}
+          <div className="flex gap-2">
+            {(["viewer", "admin"] as const).map((r) => (
               <button
-                onClick={() => setDarkMode(!darkMode)}
-                className="flex items-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground"
+                key={r}
+                onClick={() => {
+                  onRoleChange(r);
+                  setMenuOpen(false);
+                }}
+                className={`flex-1 py-2 rounded-xl text-sm transition ${
+                  role === r
+                    ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow"
+                    : "border"
+                }`}
               >
-                {darkMode ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
-                )}
-                {darkMode ? "Light Mode" : "Dark Mode"}
+                {r}
               </button>
+            ))}
+          </div>
 
-              <div className="flex gap-2">
-                {(["admin", "viewer"] as const).map((r) => (
-                  <button
-                    key={r}
-                    onClick={() => {
-                      setRole(r);
-                      setMenuOpen(false);
-                    }}
-                    className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors ${
-                      role === r
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-background text-muted-foreground"
-                    }`}
-                  >
-                    {r === "admin" ? (
-                      <ShieldCheck className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                    {r.charAt(0).toUpperCase() + r.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+          {/* RESET */}
+          {onResetData && (
+            <button
+              onClick={onResetData}
+              className="w-full py-2 rounded-xl border flex items-center justify-center gap-2"
+            >
+              <RefreshCw
+                className={`h-4 w-4 ${isResetting ? "animate-spin" : ""}`}
+              />
+              Reset Data
+            </button>
+          )}
+
+          {/* DARK MODE */}
+          <button
+            onClick={onToggleDark}
+            className="w-full py-2 rounded-xl border"
+          >
+            Toggle Theme
+          </button>
+        </div>
+      </div>
+    </header>
   );
 }

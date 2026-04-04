@@ -1,12 +1,31 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell, Legend, BarChart, Bar,
-} from 'recharts';
-import { motion, AnimatePresence } from 'framer-motion';
-import { BarChart2, PieChart as PieIcon, TrendingUp } from 'lucide-react';
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  BarChart,
+  Bar,
+} from "recharts";
+import { motion, AnimatePresence } from "framer-motion";
+import { BarChart2, PieChart as PieIcon, TrendingUp } from "lucide-react";
 
-const COLORS = ['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4'];
+const COLORS = [
+  "#3B82F6",
+  "#EF4444",
+  "#10B981",
+  "#F59E0B",
+  "#8B5CF6",
+  "#EC4899",
+  "#06B6D4",
+];
 
 interface ChartsProps {
   monthlyTrend: { date: string; balance: number }[];
@@ -14,16 +33,18 @@ interface ChartsProps {
 }
 
 const tabs = [
-  { id: 'trend', label: 'Balance Trend', icon: TrendingUp },
-  { id: 'category', label: 'By Category', icon: PieIcon },
-  { id: 'bar', label: 'Breakdown', icon: BarChart2 },
+  { id: "trend", label: "Balance Trend", icon: TrendingUp },
+  { id: "category", label: "By Category", icon: PieIcon },
+  { id: "bar", label: "Breakdown", icon: BarChart2 },
 ];
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="rounded-xl border border-border bg-card/95 px-4 py-3 shadow-xl backdrop-blur-sm">
-      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {label}
+      </p>
       {payload.map((p: any, i: number) => (
         <p key={i} className="text-sm font-bold" style={{ color: p.color }}>
           ${Math.abs(p.value).toLocaleString()}
@@ -33,21 +54,37 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
 };
 
-const CustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }: any) => {
+const CustomLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+  name,
+}: any) => {
   if (percent < 0.07) return null;
   const RADIAN = Math.PI / 180;
   const r = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + r * Math.cos(-midAngle * RADIAN);
   const y = cy + r * Math.sin(-midAngle * RADIAN);
   return (
-    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={11} fontWeight={700}>
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor="middle"
+      dominantBaseline="central"
+      fontSize={11}
+      fontWeight={700}
+    >
       {`${(percent * 100).toFixed(0)}%`}
     </text>
   );
 };
 
 export default function Charts({ monthlyTrend, categoryTotals }: ChartsProps) {
-  const [activeTab, setActiveTab] = useState('trend');
+  const [activeTab, setActiveTab] = useState("trend");
 
   return (
     <motion.div
@@ -68,8 +105,8 @@ export default function Charts({ monthlyTrend, categoryTotals }: ChartsProps) {
                 onClick={() => setActiveTab(tab.id)}
                 className={`relative flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
                   isActive
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -78,7 +115,7 @@ export default function Charts({ monthlyTrend, categoryTotals }: ChartsProps) {
                   <motion.div
                     layoutId="activeTab"
                     className="absolute inset-0 rounded-lg bg-primary/10"
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
               </button>
@@ -90,7 +127,7 @@ export default function Charts({ monthlyTrend, categoryTotals }: ChartsProps) {
       {/* Chart area */}
       <div className="p-6">
         <AnimatePresence mode="wait">
-          {activeTab === 'trend' && (
+          {activeTab === "trend" && (
             <motion.div
               key="trend"
               initial={{ opacity: 0, x: -10 }}
@@ -99,22 +136,48 @@ export default function Charts({ monthlyTrend, categoryTotals }: ChartsProps) {
               transition={{ duration: 0.2 }}
             >
               <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={monthlyTrend} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <AreaChart
+                  data={monthlyTrend}
+                  margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+                >
                   <defs>
-                    <linearGradient id="balanceGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.02} />
+                    <linearGradient
+                      id="balanceGrad"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop
+                        offset="5%"
+                        stopColor="hsl(var(--primary))"
+                        stopOpacity={0.3}
+                      />
+                      <stop
+                        offset="95%"
+                        stopColor="hsl(var(--primary))"
+                        stopOpacity={0.02}
+                      />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                  />
                   <XAxis
                     dataKey="date"
-                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                    tick={{
+                      fontSize: 11,
+                      fill: "hsl(var(--muted-foreground))",
+                    }}
                     axisLine={false}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                    tick={{
+                      fontSize: 11,
+                      fill: "hsl(var(--muted-foreground))",
+                    }}
                     axisLine={false}
                     tickLine={false}
                     tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
@@ -126,7 +189,12 @@ export default function Charts({ monthlyTrend, categoryTotals }: ChartsProps) {
                     stroke="hsl(var(--primary))"
                     strokeWidth={3}
                     fill="url(#balanceGrad)"
-                    dot={{ fill: 'hsl(var(--primary))', r: 4, strokeWidth: 2, stroke: 'hsl(var(--card))' }}
+                    dot={{
+                      fill: "hsl(var(--primary))",
+                      r: 4,
+                      strokeWidth: 2,
+                      stroke: "hsl(var(--card))",
+                    }}
                     activeDot={{ r: 6, strokeWidth: 2 }}
                   />
                 </AreaChart>
@@ -134,7 +202,7 @@ export default function Charts({ monthlyTrend, categoryTotals }: ChartsProps) {
             </motion.div>
           )}
 
-          {activeTab === 'category' && (
+          {activeTab === "category" && (
             <motion.div
               key="category"
               initial={{ opacity: 0, x: -10 }}
@@ -159,12 +227,19 @@ export default function Charts({ monthlyTrend, categoryTotals }: ChartsProps) {
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(v: number) => [`$${v.toLocaleString()}`, 'Amount']} />
+                  <Tooltip
+                    formatter={(v: number) => [
+                      `$${v.toLocaleString()}`,
+                      "Amount",
+                    ]}
+                  />
                   <Legend
                     iconType="circle"
                     iconSize={8}
                     formatter={(value) => (
-                      <span className="text-xs text-muted-foreground">{value}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {value}
+                      </span>
                     )}
                   />
                 </PieChart>
@@ -172,7 +247,7 @@ export default function Charts({ monthlyTrend, categoryTotals }: ChartsProps) {
             </motion.div>
           )}
 
-          {activeTab === 'bar' && (
+          {activeTab === "bar" && (
             <motion.div
               key="bar"
               initial={{ opacity: 0, x: -10 }}
@@ -181,16 +256,29 @@ export default function Charts({ monthlyTrend, categoryTotals }: ChartsProps) {
               transition={{ duration: 0.2 }}
             >
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={categoryTotals} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                <BarChart
+                  data={categoryTotals}
+                  margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="name"
-                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                    tick={{
+                      fontSize: 11,
+                      fill: "hsl(var(--muted-foreground))",
+                    }}
                     axisLine={false}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                    tick={{
+                      fontSize: 11,
+                      fill: "hsl(var(--muted-foreground))",
+                    }}
                     axisLine={false}
                     tickLine={false}
                     tickFormatter={(v) => `$${v}`}

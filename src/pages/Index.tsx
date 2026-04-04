@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -19,11 +19,13 @@ import InsightsBox from "@/components/dashboard/InsightsBox";
 const Index = () => {
   const { transactions, loading, add, update, remove, reset } =
     useTransactions();
+
   const [role, setRole] = useLocalStorage<"admin" | "viewer">(
     "fh-role",
     "admin",
   );
-  /*const [filters, setFilters] = useLocalStorage("fh-filters", {
+
+  const [filters, setFilters] = useState({
     search: "",
     type: "all",
     sort: "date-desc",
@@ -32,22 +34,30 @@ const Index = () => {
     amountMin: "",
     amountMax: "",
     category: "all",
-  });*/
-  const [filters, setFilters] = useState({
-    search: "",
-    type: "all", // 👈 IMPORTANT
-    sort: "date-desc",
-    dateFrom: "",
-    dateTo: "",
-    amountMin: "",
-    amountMax: "",
-    category: "all",
   });
+
   const [darkMode, setDarkMode] = useLocalStorage("fh-dark", false);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Transaction | null>(null);
+  const messages = [
+    "Track your expenses smartly 💡",
+    "Stay on top of your finances 💰",
+    "Make better money decisions 📊",
+    "Control your spending habits 🚀",
+    "Your financial clarity starts here ✨",
+  ];
+  const [currentMsg, setCurrentMsg] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMsg((prev) => (prev + 1) % messages.length);
+    }, 3000); // change every 3 sec
+
+    return () => clearInterval(interval);
+  }, []);
 
   const { totalIncome, totalExpense, balance } = calculateTotals(transactions);
+
   const categoryTotals = getCategoryTotals(transactions);
   const monthlyTrend = getMonthlyTrend(transactions);
 
@@ -72,56 +82,83 @@ const Index = () => {
 
   return (
     <div className={darkMode ? "dark" : ""}>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950">
+        {/* NAVBAR */}
         <Navbar
           role={role}
-          setRole={setRole}
-          darkMode={darkMode}
-          setDarkMode={setDarkMode}
+          onRoleChange={setRole}
+          isDark={darkMode}
+          onToggleDark={() => setDarkMode(!darkMode)}
+          onResetData={reset}
         />
 
-        <main className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
-          {/* Page header */}
+        {/* MAIN */}
+        <main className="mx-auto max-w-7xl space-y-8 p-4 sm:p-6 lg:p-8">
+          {/* HEADER */}
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2"
+            transition={{ duration: 0.5 }}
+            className="relative flex items-center gap-3"
           >
-            <Sparkles className="h-5 w-5 text-primary" />
+            {/* Glow */}
+            <div className="absolute inset-0 blur-2xl opacity-20 bg-gradient-to-r from-blue-500 to-purple-500" />
 
-            <div>
-              <h1 className="text-2xl font-black text-foreground">Dashboard</h1>
-              <p className="text-sm text-muted-foreground">
-                Your financial overview at a glance
-              </p>
+            <Sparkles className="h-6 w-6 text-blue-500 relative z-10" />
+
+            <div className="relative z-10">
+              <h1 className="text-3xl font-black bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">
+                Dashboard
+              </h1>
+
+              {/* ✅ Rotating Text */}
+              <div className="relative h-5 overflow-hidden">
+                <p
+                  key={currentMsg}
+                  className="text-sm text-muted-foreground transition-all duration-500 animate-fade-in-up"
+                >
+                  {messages[currentMsg]}
+                </p>
+              </div>
             </div>
 
-            {/* Reset Button */}
+            {/* RESET BUTTON */}
             <button
               onClick={reset}
-              className="ml-auto flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              className="ml-auto relative px-4 py-2 text-sm rounded-xl border border-white/10 bg-white/60 dark:bg-zinc-900/60 backdrop-blur hover:scale-105 transition group"
             >
-              ↺ Reset Data
+              <span className="relative z-10 flex items-center gap-2">
+                ↺ Reset
+              </span>
+
+              <div className="absolute inset-0 rounded-xl blur-lg opacity-0 group-hover:opacity-40 bg-gradient-to-r from-blue-500 to-purple-500 transition" />
             </button>
           </motion.div>
 
-          {/* Loading spinner */}
+          {/* LOADING */}
           {loading ? (
             <div className="flex h-64 items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+              <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
             </div>
           ) : (
             <>
+              {/* CARDS */}
               <SummaryCards
                 balance={balance}
                 totalIncome={totalIncome}
                 totalExpense={totalExpense}
               />
+
+              {/* CHARTS */}
               <Charts
                 monthlyTrend={monthlyTrend}
                 categoryTotals={categoryTotals}
               />
+
+              {/* INSIGHTS */}
               <InsightsBox transactions={transactions} />
+
+              {/* TABLE */}
               <TransactionsTable
                 transactions={transactions}
                 role={role}
@@ -134,24 +171,29 @@ const Index = () => {
           )}
         </main>
 
-        {/* Floating Add Button */}
+        {/* FLOATING BUTTON */}
         {role === "admin" && (
           <motion.button
-            initial={{ opacity: 0, scale: 0.5 }}
+            initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => {
               setEditing(null);
               setModalOpen(true);
             }}
-            className="fixed bottom-6 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-xl shadow-blue-500/40 transition-shadow hover:shadow-2xl hover:shadow-blue-500/50"
-            aria-label="Add transaction"
+            className="fixed bottom-6 right-6 group"
           >
-            <Plus className="h-6 w-6" />
+            {/* Glow */}
+            <div className="absolute inset-0 blur-xl opacity-50 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
+
+            <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 text-white shadow-2xl transition-all">
+              <Plus className="h-6 w-6 group-hover:rotate-90 transition" />
+            </div>
           </motion.button>
         )}
 
+        {/* MODAL */}
         <TransactionModal
           open={modalOpen}
           onClose={() => {
