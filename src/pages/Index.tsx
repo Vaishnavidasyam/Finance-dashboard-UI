@@ -121,18 +121,6 @@ const Index = () => {
                 </p>
               </div>
             </div>
-
-            {/* RESET BUTTON */}
-            <button
-              onClick={reset}
-              className="ml-auto relative px-4 py-2 text-sm rounded-xl border border-white/10 bg-white/60 dark:bg-zinc-900/60 backdrop-blur hover:scale-105 transition group"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                ↺ Reset
-              </span>
-
-              <div className="absolute inset-0 rounded-xl blur-lg opacity-0 group-hover:opacity-40 bg-gradient-to-r from-blue-500 to-purple-500 transition" />
-            </button>
           </motion.div>
 
           {/* LOADING */}
