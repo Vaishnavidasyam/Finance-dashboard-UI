@@ -72,7 +72,7 @@ export default function Navbar({
                   {r === "admin" ? (
                     <>
                       <ShieldCheck className="h-3 w-3" />
-                      <Sparkles className="h-3 w-3 animate-pulse" />
+                      
                     </>
                   ) : (
                     <User className="h-3 w-3" />
