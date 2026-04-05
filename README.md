@@ -128,10 +128,12 @@ https://finance-dashboard-ui-yojq.vercel.app
 ![Dashboard](public/screenshots/dashboard.png)
 
 **Charts**
-![Charts](public/screenshots/charts.png)
+![Charts](public/screenshots/charts1.png)
+![Charts](public/screenshots/charts2.png)
+![Charts](public/screenshots/charts3.png)
 
 **Transactions**
-![Transactions](public/screenshots/table.png)
+![Transactions](public/screenshots/transaction.png)
 
 **Add Transaction**
 ![Add Transaction](public/screenshots/addTransaction.png)
