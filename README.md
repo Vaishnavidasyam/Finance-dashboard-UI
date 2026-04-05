@@ -1,28 +1,30 @@
 # Finance Dashboard UI
 
-**Overview**
+### Overview
 
 A clean and interactive Finance Dashboard built using React, TypeScript, and Tailwind CSS.
 This application helps users track income, expenses, and financial insights in a simple and beginner-friendly way.
 
-**Features**
+### Features
+
 
 | Feature | Description |
 |---|---|
-| 📊 **Charts** | Area, Pie & Bar charts with tabbed navigation |
-| 💳 **Transactions** | Add, edit, delete with animated table |
-| 🔍 **Advanced Filters** | Search, date range, amount range, category |
-| 📤 **Export** | Download transactions as CSV or JSON |
-| 🌙 **Dark Mode** | Toggle between light and dark themes |
-| 💾 **Local Storage** | Data persists across page refreshes |
-| 🔗 **Mock API** | Simulated async API with loading states |
-| ✨ **Animations** | Smooth transitions via Framer Motion |
-| 📱 **Responsive** | Works on mobile, tablet and desktop |
-| 🔒 **Role Access** | Admin (full access) and Viewer (read-only) modes |
- 
-**Getting Started**
+|  **Charts** | Area, Pie & Bar charts with tabbed navigation |
+|  **Transactions** | Add, edit, delete with animated table |
+|  **Advanced Filters** | Search, date range, amount range, category |
+|  **Export** | Download transactions as CSV or JSON |
+|  **Dark Mode** | Toggle between light and dark themes |
+|  **Local Storage** | Data persists across page refreshes |
+|  **Mock API** | Simulated async API with loading states |
+|  **Animations** | Smooth transitions via Framer Motion |
+|  **Responsive** | Works on mobile, tablet and desktop |
+|  **Role Access** | Admin (full access) and Viewer (read-only) modes |
 
-### Prerequisites
+ 
+### Getting Started
+
+**Prerequisites**
 
 Make sure you have the following installed:
 
@@ -35,7 +37,7 @@ node -v
 npm -v
 ```
 
-### Installation
+**Installation**
 ```bash
 # 1. Clone the repository
 git clone https://github.com/Vaishnavidasyam/Finance-dashboard-UI.git
@@ -50,11 +52,10 @@ npm install
 npm run dev
 ```
 
-Open your browser at **http://localhost:8080** 🎉
+Open your browser at **http://localhost:8080** 
 
----
 
-## 📦 Available Scripts
+### Available Scripts
 
 | Command | Description |
 |---|---|
@@ -65,7 +66,7 @@ Open your browser at **http://localhost:8080** 🎉
 | `npm run test` | Run unit tests |
 
 
-**Tech Stack**
+### Tech Stack
 
 | Technology | Purpose |
 |---|---|
@@ -79,42 +80,76 @@ Open your browser at **http://localhost:8080** 🎉
 | [Lucide React](https://lucide.dev/) | Icons |
 | [date-fns](https://date-fns.org/) | Date formatting |
 
-**Project Structure**
+
+### Project Structure
+
+
+
+```
 src/
 ├── components/
 │   └── dashboard/
-│       ├── Navbar.tsx            # Top navigation bar
-│       ├── SummaryCards.tsx      # Balance, income & expense cards
-│       ├── Charts.tsx            # Area, Pie & Bar charts
-│       ├── InsightsBox.tsx       # Smart spending insights
-│       ├── TransactionsTable.tsx # Filterable transactions table
-│       └── TransactionModal.tsx  # Add / edit transaction modal
+│       ├── Navbar.tsx             # Top navigation bar
+│       ├── SummaryCards.tsx       # Balance, income & expense cards
+│       ├── Charts.tsx             # Area, Pie & Bar charts
+│       ├── InsightsBox.tsx        # Smart spending insights
+│       ├── TransactionsTable.tsx  # Filterable transactions table
+│       └── TransactionModal.tsx   # Add / edit transaction modal
+│
 ├── data/
 │   └── mockData.ts               # 15 realistic mock transactions
+│
 ├── hooks/
 │   ├── useTransactions.ts        # API hook with loading & error state
 │   └── useLocalStorage.ts        # Persistent localStorage hook
+│
 ├── services/
 │   └── transactionService.ts     # Mock async API service
+│
 ├── utils/
 │   ├── calculations.ts           # Totals, category & trend helpers
 │   └── exportUtils.ts            # CSV & JSON export logic
+│
 └── pages/
-└── Index.tsx                 # Main dashboard page
-
-**Live Demo**
-
-**Screenshots**
+    └── Index.tsx                # Main dashboard page
+```
+ 
 
 
+### Live Demo
 
-**Highlights**
+https://finance-dashboard-ui-yojq.vercel.app
+
+
+
+### Screenshots
+
+**Dashboard**
+![Dashboard](public/screenshots/dashboard.png)
+
+**Charts**
+![Charts](public/screenshots/charts.png)
+
+**Transactions**
+![Transactions](public/screenshots/table.png)
+
+**Add Transaction**
+![Add Transaction](public/screenshots/addTransaction.png)
+
+**Dark Mode**
+![Dark Mode](public/screenshots/darkmode.png)
+
+
+
+### Highlights
+
 Beginner-friendly design
 Clean and responsive UI
 Real-world architecture
 Fully functional (CRUD + filters + charts)
 
-**Author**
+
+### Author
 
 **Vaishnavi Dasyam**
 - GitHub: [@Vaishnavidasyam](https://github.com/Vaishnavidasyam)
